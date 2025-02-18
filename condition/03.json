@@ -1,0 +1,28 @@
+{
+    "position_depart":
+    [
+        1,4
+    ],
+    "parcours":
+    [
+        "ArrowDown","ArrowLeft","ArrowUp","ArrowDown","ArrowLeft","ArrowUp","ArrowRight"
+    ],
+    "grille":
+    [
+        "","","","","",
+        "","","","","",
+        "","","","","",
+        "","","","","",
+        "","","","",""
+
+    ],
+    "script":
+    [
+    "for i in range(2)",
+    "    down()",
+    "    left()",
+    "    up()",
+    "right()"
+    ]
+    
+}

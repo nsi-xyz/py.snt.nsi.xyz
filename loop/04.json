@@ -1,0 +1,15 @@
+{
+    "position_depart":
+    [
+        1,3
+    ],
+    "parcours":
+    [
+        "ArrowRight","ArrowRight","ArrowRight","ArrowRight","ArrowUp"
+    ],
+    "script":
+    [
+    "For i in range(4):","    right()","up()"
+    ]
+    
+}

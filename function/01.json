@@ -1,0 +1,27 @@
+{
+    "position_depart":
+    [
+        1,2
+    ],
+    "parcours":
+    [
+        "ArrowRight","ArrowRight"
+    ],
+    "grille":
+    [
+        "","","","","",
+        "","","","","",
+        "","","","","",
+        "","","","","",
+        "","","","",""
+
+    ],
+    "script":
+    [
+    "function avance:",
+    "    right()",
+    "    right()",
+    "avance()"
+    ]
+    
+}

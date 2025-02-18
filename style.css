@@ -1,0 +1,23 @@
+const-js {
+    position:relative;
+    top:30px;
+    width:400px;
+    height: 400px;
+    display: grid;
+    grid-template-columns: repeat(5, 400px); 
+    grid-gap: 10px; 
+    justify-content: center; 
+}
+
+instru-js {
+    position:relative;
+    font-size: 200%;
+    margin:15px 0px;
+    white-space: pre;
+    display:block;
+    font-family: sans-serif;
+}
+menu-lvl {
+    display: flex;
+    gap:15px
+}
