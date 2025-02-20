@@ -39,3 +39,9 @@ Ne sera pas nécessairement accessible via le menu mais sera accessible via une 
 
 
 
+## Contributeurs :
+- Vincent ROBERT : Front only, UI / UX, debuguage, débugage CSS, création des 10 niveaux "start". 
+- Ilyas RAHMOUN : Adapatation d'un layouts de https://pure-css.github.io/ pour https://web.snt.nsi.xyz/ réutilisé ici, testeur.
+- Vivien G.R. (n'a le droit de mettre son nom de famille que quand il n'est pas majeur 😅)
+-- Back : php, html, et beaucoup de JS, portage du concpet https://compute-it.toxicode.fr/?progression=python
+-- Front : html, css, responsive, 
