@@ -8,7 +8,8 @@ En ligne sur https://python.snt.nsi.xyz/
 
 a changer
 
-web.snt.nsi.xyz est un site web regroupant 10 énigmes sur le thème du web et plus particulièrement sur du HTML, CSS, JavaScript. Ce sont des énigmes plutôt simples, plus ou moins abordables pour des élèves de SNT, soit des élèves de seconde.
+python.snt.nsi.xyz est un site interactif permettant d’apprendre à lire et comprendre du code Python. À travers une grille de jeu, les élèves découvrent des concepts clés comme les boucles, les conditions et les fonctions. Les exercices sont ludiques et accessibles, conçus pour les élèves de SNT en seconde.
+
 
 ### Débuter
 Bien débuter en python, suivre les instructions 🚀
