@@ -28,13 +28,18 @@ Quand Python devient un super-héros 🦸‍♂️
 Structure dossier / fichier json
 Des explicatiobns pour aider la cr"ation d'un niveau
 
+## Créer un niveau, des parties
+
 ### Créer un dossier
 
 ### Créer un niveau
 
 ### Ajouter un dossier au site
 
-Ne sera pas nécessairement accessible via le menu mais sera accessible via une URL unique.
+Pour l'instant le dépot des dossiers / fichiers sur le site est réalisé uniquement par les concepteurs du jeu pour des raisons de sécurité.
+Les élèves de spécialité NSI du lycée Louis Pasteur auront, prochainement, des niveaux à créer. 
+
+Lorsque le dépot sera possible est sécurisé, vous pourrez déposer vos propres niveaux, ils ne seront pas nécessairement accessible via le menu mais seront accessible via une URL unique.
 
 
 
