@@ -5,7 +5,7 @@ Dépot github du projet python.snt.nsi.xyz
 En ligne sur https://python.snt.nsi.xyz/
 
 
-python.snt.nsi.xyz est un site interactif permettant d’apprendre à lire et comprendre du code Python. À travers une grille de jeu, les élèves découvrent des concepts clés comme les boucles, les conditions et les fonctions. Les exercices sont ludiques et accessibles, conçus pour les élèves de SNT en seconde.
+python.snt.nsi.xyz est un site interactif permettant d’apprendre à lire et comprendre du code Python. À travers une grille de jeu, les élèves découvrent des concepts clés comme les boucles, les conditions et les fonctions. Les exercices sont ludiques et accessibles, conçus une initiation au python pour les élèves de SNT en seconde.
 
 
 ### Débuter
@@ -14,12 +14,15 @@ Dans la catégorie débuter, il y a des niveux avec toutes les différentes cat�
 
 ### Les boucles
 Tourner en rond, mais avec intelligence 🔄
+La catégorie sur les boucles contient différents niveaux pour apprendre a lire et a comprendre une boucle en python.
 
 ### Les tests conditionnels
 Quand Python doit faire un choix 🐭🧀
+Dans cette catégorie, il y a des niveaux sur les tests conditionnels.
 
 ### Les fonctions
 Quand Python devient un super-héros 🦸‍♂️
+Cette dernière catégorie contient des niveaux pour apprendre a lire et a comprendre les fonctions en python.
 
 ### Comment ça marche
 
