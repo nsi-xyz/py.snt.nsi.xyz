@@ -12,9 +12,13 @@
     [
         2,4
     ],
+	"texte":
+    [
+       "il faudra lire, comprendre, suivre les instruction en python"
+    ],
     "parcours":
     [
-        "↑→↑↑↑"
+        "↑→↑↑←↑"
     ],
     "grille":
     [
@@ -31,7 +35,8 @@
     "right()",
     "up()",
 	"up()",
-	"up()"
+	"left()",
+	"up()"	
     ]
     
 }

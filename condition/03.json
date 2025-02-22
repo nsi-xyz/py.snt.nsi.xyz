@@ -1,28 +1,44 @@
 {
+    "comment créer un niveau ?":
+    {
+        "position départ":"mettre les coordonées du départ de votre parcours (0,0 c'est en haut à gauche)",
+        "parcours":["écrire le parcours avec un str avec les déplacements",
+        "utiliser les flèches unicodes pour représenter les déplacements (←↑→↓)"],
+        "grille":["la grille permet de rentrer soit des couleurs de fond en hexadécimal pour une case",
+        "soit de rentrer un émoji qui sera affiché tel quel dans le niveau a la place du cercle par défaut"],
+        "script":"écrire le script avec une ligne par str, écrire les mots clef en anglais et respecter les tabulations"
+    },
     "position_depart":
     [
-        1,4
+        3,3
+    ],
+    "texte":
+    [
+       "Quel fromage choisir ?"
     ],
     "parcours":
     [
-        "ArrowDown","ArrowLeft","ArrowUp","ArrowDown","ArrowLeft","ArrowUp","ArrowRight"
+        "↓←←"
     ],
     "grille":
     [
         "","","","","",
         "","","","","",
         "","","","","",
-        "","","","","",
-        "","","","",""
+        "","","","🐁","",
+        "","🧀","","#FFC72C","🧀"
 
     ],
     "script":
     [
-    "for i in range(2)",
-    "    down()",
-    "    left()",
+    "down()",
+	"if not #FFC72C:",
+	"    right()",
+    "elif #CBCBCB:",
     "    up()",
-    "right()"
+    "else:",
+    "    left()",
+    "left()"
     ]
     
 }

@@ -35,7 +35,7 @@ if (is_dir($directory)) {
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="nothing, I delete it">
+  <meta name="description" content="Apprends à lire et comprendre du code Python en explorant un jeu interactif ! Découvre les boucles, les conditions et les fonctions tout en te déplaçant dans une grille. Idéal pour débuter en programmation ! 🚀">
   <title>Accueil • python.snt.nsi.xyz</title>
   <link rel="stylesheet" href="./css/pure-min.css">
   <link rel="stylesheet" href="./css/css2"> 
@@ -56,7 +56,7 @@ if (is_dir($directory)) {
             <li class="menu-ko" id="loop"><a href="https://python.snt.nsi.xyz/play.php?r=loop&p=1" class="pure-menu-link">🟠 Les boucles</a></li>
             <li class="menu-ko" id="condition"><a href="https://python.snt.nsi.xyz/play.php?r=condition&p=1" class="pure-menu-link">🟠 Les tests conditionnels</a></li>
             <li class="menu-ko" id="function"><a href="https://python.snt.nsi.xyz/play.php?r=function&p=1" class="pure-menu-link">🟠 Les fonctions</a></li>
-            <li class="pure-menu-item-help"><a href="" class="pure-menu-link">🔷 Aide &amp; Boite à outils</a></li>
+            <li class="pure-menu-item-help"><a href="https://github.com/nsi-xyz/py.snt.nsi.xyz" class="pure-menu-link">🔷 Créer un niveau</a></li>
           </ul>
       </div>            <div class="menu-bottom"><li class="pure-menu-item-timer">Il reste <timer>60</timer> minutes</li>
             <li class="pure-menu-item-reset"><a onclick="reset();" class="pure-menu-link">❌ Effacer / Recommencer</a></li></div>
@@ -73,11 +73,11 @@ if (is_dir($directory)) {
         </h2>
         <h2 class="content-subhead" id="text-intro"></h2>
       <div class="pure-g">
-      <div class="pure-u-3-5">
-        <const-js></const-js>
+      <div class="pure-u-2-5">
+        <const-js id="conteneur"></const-js>
         </div>
         
-      <div class="pure-u-1-6">
+      <div class="pure-u-2-5">
         <instru-js></instru-js>
         </div>
         </div>
@@ -103,6 +103,7 @@ function updateTimer() {
         value--;
         timer.textContent = value.toString().padStart(2, "0");
     } else {
+        reset();
         window.location.replace(window.location.href);
     }
 }

@@ -10,33 +10,38 @@
     },
     "position_depart":
     [
-        4,4
+        1,2
     ],
     "texte":
     [
-       "Quoi?! Une boucle dans une boucle?"
+       "Le chemin le plus direct n'est pas toujours le meilleur"
     ],
     "parcours":
     [
-        "←←↑→←←↑→↓"
+        "→↓→→→"
     ],
     "grille":
     [
         "","","","","",
         "","","","","",
-        "","","⬇️","","",
-        "","🔄","➡️","🔄","",
-        "","","⬆️","⬅️","⬅️"
+        "","🐁","","","",
+        "🧀","","#FFC72C","","",
+        "","","","🪤",""
 
     ],
     "script":
     [
-    "for i in range(2):",
-    "    for i in range(2):",
+    "if 🐁:",
+	"    right()",
+	"    down()",
+    "    if not #FFC72C:",
     "        left()",
-    "    up()",
-    "    right()",
-    "down()"
+    "        left()",
+    "    else:",
+    "        right()",
+    "        right()",
+    "        right()"
+
     ]
     
 }

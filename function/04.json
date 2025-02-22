@@ -10,33 +10,39 @@
     },
     "position_depart":
     [
-        4,4
+        0,1
     ],
     "texte":
     [
-       "Quoi?! Une boucle dans une boucle?"
+       "L'enfant est en danger mais comment faire?"
     ],
     "parcours":
     [
-        "←←↑→←←↑→↓"
+        "↑→→↓↑←←↓"
     ],
     "grille":
     [
         "","","","","",
+        "🦸","🦹","👶","","",
         "","","","","",
-        "","","⬇️","","",
-        "","🔄","➡️","🔄","",
-        "","","⬆️","⬅️","⬅️"
+        "","","","","",
+        "","","","",""
 
     ],
     "script":
     [
-    "for i in range(2):",
-    "    for i in range(2):",
-    "        left()",
-    "    up()",
+    "def vole():",
+	"    up()",
     "    right()",
-    "down()"
+    "    right()",
+    "    down()",
+    "def fuir():",
+    "    up()",
+    "    left()",
+    "    left()",
+    "    down()",
+    "vole()",
+    "fuir()"
     ]
     
 }

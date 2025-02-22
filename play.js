@@ -19,10 +19,8 @@ let traduc_parcours = {
 if (localStorage.getItem('lvl') !== null) {
 	lvl = JSON.parse(localStorage.getItem('lvl'))
     localStorage.setItem('lvl',JSON.stringify(lvl))
-    /*document.getElementById("nb_lvl").innerHTML = "lvl:"+String(niv)*/
 } else {
 	lvl = {"start":[], "loop":[], "condition":[], "function":[]};
-    /*document.getElementById("nb_lvl").innerHTML = "lvl:"+String(niv)*/
     localStorage.setItem('lvl',JSON.stringify(lvl))
 };
 
@@ -51,17 +49,22 @@ class case_js extends HTMLElement {
                 let set_g = infos["grille"]
                 for (let i = 0;i<t_grille;i++) {
                     for (let j = 0;j<t_grille;j++) {
+                        let conteneur = document.getElementById('conteneur')
+                        conteneur.style.gridTemplateColumns = 'repeat(5, 1fr)';
+                        conteneur.style.gridTemplateRows = 'repeat(5, 1fr)'; 
                         let test = document.createElement("div");
                         test.id = `case${i*t_grille+j+1}`;
+                        test.classList.add('disque')
                         this.appendChild(test)
                         let style = document.createElement("style");
                         if (!avec_emo(set_g[t_grille*i+j]) || set_g[t_grille*i+j][0] ==="#") {
-                            style.innerHTML += `#case${i*t_grille+j+1} {position:absolute;left:${400/t_grille*j}px;top:${400/t_grille*i}px;height:${300/t_grille}px;width:${300/t_grille}px;background-color:${set_g[t_grille*i+j]||"#CBCBCB"};border-radius:175px}`
+                            style.innerHTML += `#case${i*t_grille+j+1} {background-color:${set_g[t_grille*i+j]||"#CBCBCB"};}`
                         } else {
                             test.innerHTML = set_g[t_grille*i+j]
-                            style.innerHTML += `#case${i*t_grille+j+1} {position:absolute;left:${400/t_grille*j}px;top:${400/t_grille*i}px;padding:0px 0px 0 0px;font-size:48px;justify-content:center;align-items:center;display:flex;height:60px;width:60px;}`
+                            test.classList.add('emoji')
+                            style.innerHTML += `#case${i*t_grille+j+1} {justify-content:center;align-items:center;display:flex; font-size:2.2em;}`
                         }
-                        this.appendChild(style)
+                        conteneur.appendChild(style)
                         dic_affich[`${j},${i}`]=document.getElementById(`case${i*t_grille+j+1}`);
                     };
                 };
@@ -80,32 +83,44 @@ class instru_js extends HTMLElement {
                     parcours.push(traduc_parcours[infos["parcours"][0][i]])
                 }
                 for (let i = 0;i<consignes.length;i++) {
-                    let test = document.createElement("p");
+                    let test = document.createElement("div");
                     test.id = `instru${i+1}`;
-                    if (consignes[i].slice(0,2) === 'if') {
-                        if (consignes[i].slice(3,6) === 'not') {
-                            let couleur=consignes[i].slice(7,consignes[i].indexOf(":"))
+                    let space=0
+                    if (consignes[i].slice(0,1) ===" ") {
+                        while (consignes[i].slice(space,space+1) === " ") {
+                            space++;
+                        }   
+                        console.log('space',space)
+                    }
+                    if (consignes[i].slice(space,space+2) === 'if' || consignes[i].slice(space,space+4) === 'elif') {
+                        console.log('true')
+                        let ifelif =0
+                        if (consignes[i].slice(space,space+4) === 'elif') {
+                            ifelif = 2
+                        }
+                        if (consignes[i].slice(space+3+ifelif,space+6+ifelif) === 'not') {
+                            let couleur=consignes[i].slice(space+7+ifelif,consignes[i].indexOf(":"))
                             console.log(couleur)
                             let posi = consignes[i].indexOf(couleur)
                             let str = consignes[i].slice(0,posi)
                             console.log(str)
                             if (avec_emo(couleur)) {
-                                str=str+`<div style='height:25px;width:25px;display:inline-block;'>${couleur}</div>`+" :"
+                                str=str+`<div style='height:15px;width:15px;display:inline-block;'>${couleur}</div>`+" :"
                             } else {
-                                str=str+`<div style='height:25px;width:25px;background-color:${couleur};border-radius:50%;display:inline-block;'></div>`+":"
+                                str=str+`<div style='height:15px;width:15px;background-color:${couleur};border-radius:50%;display:inline-block;'></div>`+":"
                             }
                             console.log(str)
                             test.innerHTML = str
                         } else {
-                            let couleur=consignes[i].slice(3,consignes[i].indexOf(":"))
+                            let couleur=consignes[i].slice(space+3+ifelif,consignes[i].indexOf(":"))
                             console.log(couleur)
                             let posi = consignes[i].indexOf(couleur)
                             let str = consignes[i].slice(0,posi)
                             console.log(str)
                             if (avec_emo(couleur)) {
-                                str=str+`<div style='height:25px;width:25px;display:inline-block;'>${couleur}</div>`+" :"
+                                str=str+`<div style='height:15px;width:15px;display:inline-block;'>${couleur}</div>`+" :"
                             } else {
-                                str=str+`<div style='height:25px;width:25px;background-color:${couleur};border-radius:50%;display:inline-block;'></div>`+":"
+                                str=str+`<div style='height:15px;width:15px;background-color:${couleur};border-radius:50%;display:inline-block;'></div>`+":"
                             }
                             console.log(str)
                             test.innerHTML = str
@@ -127,9 +142,11 @@ class menu_lvl extends HTMLElement {
         for (let i = 0;i<jsonFilesCount;i++) { 
             let test = document.createElement("div");
             test.id = `menu${i+1}`;
-            if (i<10) {
+            if (i<9) {
                 test.innerHTML = `0${i+1}`
-            } 
+            } else {
+                test.innerHTML = `${i+1}`
+            }
             this.classList.add('table')
             test.classList.add('td-any')
             if (lvl[inelem].includes(i+1)) {
@@ -182,12 +199,11 @@ function affich_gr(move,color) {
         }
         grille[pos[1]][pos[0]] = 1
     };
-    
     if (color) {
         if (avec_emo(color)) {
             dic_affich[String(pos)].innerHTML=color
             dic_affich[String(pos)].style.backgroundColor="#FFFFFF"
-            dic_affich[String(pos)].style.fontSize="48px"
+            dic_affich[String(pos)].style.fontSize="2.2em"
             dic_affich[String(pos)].style.justifyContent="center"
             dic_affich[String(pos)].style.display="flex"
             dic_affich[String(pos)].style.alignItems="center"
@@ -213,15 +229,15 @@ function lvl_jeu(matrice_lvl) {
                 }
                 localStorage.setItem("lvl",JSON.stringify(lvl))
                 document.removeEventListener("keyup",jeu);
-                if (lvl[inelem][lvl[inelem].length-1]!==0) {
-                    wait(1000,lvl[inelem][lvl[inelem].length-1]+1)
+                if (niv < jsonFilesCount) {
+                    wait(1500,lvl[inelem][lvl[inelem].length-1]+1)
                 } else  {
-                    wait(1000)
+                    wait(1500)
                 }
             } else if (event['key']!==matrice_lvl[prog]) {
                 affich_gr(event['key'],'⛔')
                 document.removeEventListener("keyup",jeu);
-                wait(1000)
+                wait(1500)
             } else if (event['key']===matrice_lvl[prog]) {
                 affich_gr(event['key'],'');
             };
@@ -253,6 +269,18 @@ function reset() {
 function avec_emo(str) {
     const test_emo = /[\p{Extended_Pictographic}]/gu;
     return test_emo.test(str);
+}
+
+function ajusterTailleEmoji() {
+    console.log("ousp")
+    const items = document.querySelectorAll('.emoji');
+    items.forEach(item => {
+    if (item.textContent.trim()) { // Vérifie que le div contient bien un emoji
+        const size = item.clientWidth; // Taille du carré
+        console.log(size)
+        item.style.fontSize = `${size * 0.9}px`; // Ajuste la taille de l'emoji
+    }
+    });
 }
 
 fetch(`./${inelem}/00.json`)
@@ -325,9 +353,7 @@ fetch(`./${inelem}/${window.jsonFile}`)
         }, 75);
     });
 
-
 /*
 symbole quand l'on gagne
-refaire la grille 
 mieux placer les instruction du script
 */

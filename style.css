@@ -1,23 +1,35 @@
-const-js {
-    position:relative;
-    top:30px;
-    width:400px;
-    height: 400px;
+#conteneur {
+    /*position:absolute;*/
+    /*top: 42vh;
+    left:30vw;*/
+    /*width:20vw;*/
+    aspect-ratio: 1;
     display: grid;
-    grid-template-columns: repeat(5, 400px); 
-    grid-gap: 10px; 
+    gap: 0.8vw; 
     justify-content: center; 
+    align-items: center;
 }
 
 instru-js {
-    position:relative;
-    font-size: 200%;
-    margin:15px 0px;
+    /*position:absolute;*/
+    /*
+    left:60vw;
+    top:42vh;*/
+    font-size: 1.42em;
+    margin:0 0 0 20px !important;
     white-space: pre;
     display:block;
-    font-family: sans-serif;
+    font-family: monospace;
 }
 menu-lvl {
     display: flex;
     gap:15px
+}
+
+.disque {
+    /*height: 80%;*/
+    width: 80%;
+    aspect-ratio: 1;
+    border-radius:50%;
+    margin:auto;
 }

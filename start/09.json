@@ -10,33 +10,35 @@
     },
     "position_depart":
     [
-        4,4
+        2,4
     ],
-    "texte":
+	"texte":
     [
-       "Quoi?! Une boucle dans une boucle?"
+       "Définir et suivre les instructions d'une fonction"
     ],
     "parcours":
     [
-        "←←↑→←←↑→↓"
+        "↑↓↑↑↓↑↑↓↑↑↓↑"
     ],
     "grille":
     [
+        "","","🌕","","",
         "","","","","",
         "","","","","",
-        "","","⬇️","","",
-        "","🔄","➡️","🔄","",
-        "","","⬆️","⬅️","⬅️"
+        "","","","","",
+        "","","🚀","",""
 
     ],
     "script":
     [
-    "for i in range(2):",
-    "    for i in range(2):",
-    "        left()",
-    "    up()",
-    "    right()",
-    "down()"
+	"def launch():",
+	"    up()",
+	"    down()",
+	"    up()",
+	"launch()",
+	"launch()",
+	"launch()",
+	"launch()"
     ]
     
 }

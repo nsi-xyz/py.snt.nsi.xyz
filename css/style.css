@@ -42,7 +42,7 @@ body {
     max-width: 800px; /* Même sur un écran 4k on sera limité à 800 pixels */
     margin-bottom: 50px; /* Une marge externe inférieure pour augmenter l'espacement du contenu */
     line-height: 1.6em; /* La distance entre les lignes de texte est égale à 1,6 fois la taille de la police courante de l'élément */
-    min-height: 500px;
+    min-height: 400px;
 }
 
 #text-intro {
@@ -84,7 +84,7 @@ body {
     }
 
 .content-subhead {
-    margin: 25px 0 20px 0;
+    margin: 20px 0 20px 0;
     font-weight: 300;
     color: #161616;
 }
