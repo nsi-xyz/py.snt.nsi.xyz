@@ -10,6 +10,7 @@ python.snt.nsi.xyz est un site interactif permettant d’apprendre à lire et co
 
 ### Débuter
 Bien débuter en python, suivre les instructions 🚀
+Dans la catégorie débuter, il y a des niveux avec toutes les différentes catégories, les niveaux sont au départ très simple pour s'initier au langage python.
 
 ### Les boucles
 Tourner en rond, mais avec intelligence 🔄
@@ -45,6 +46,6 @@ Lorsque le dépot sera possible est sécurisé, vous pourrez déposer vos propre
 ## Contributeurs :
 - Vincent ROBERT : Front only, UI / UX, debuguage, débugage CSS, création des 10 niveaux "start". 
 - Ilyas RAHMOUN : Adapatation d'un layouts de https://pure-css.github.io/ pour https://web.snt.nsi.xyz/ réutilisé ici, testeur.
-- Vivien G.R. (n'a le droit de mettre son nom de famille que quand il n'est pas majeur 😅)
+- Vivien G.R. (n'a pas le droit de mettre son nom de famille car il n'est pas majeur 😅)
 -- Back : php, html, et beaucoup de JS, portage du concpet https://compute-it.toxicode.fr/?progression=python
 -- Front : html, css, responsive, 
