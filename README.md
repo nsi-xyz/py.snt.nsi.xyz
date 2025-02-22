@@ -9,7 +9,7 @@ python.snt.nsi.xyz est un site interactif permettant d’apprendre à lire et co
 
 
 ### Débuter
-Bien débuter en python, suivre les instructions 🚀
+Bien débuter en python, suivre les instructions 🚀  
 Dans la catégorie débuter, il y a des niveux avec toutes les différentes catégories, les niveaux sont au départ très simple pour s'initier au langage python.
 
 ### Les boucles
