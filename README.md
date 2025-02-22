@@ -24,13 +24,16 @@ Quand Python devient un super-héros 🦸‍♂️
 ### Comment ça marche
 
 Le fonctionnement du jeu repose sur plusieurs fichiers, en plus de la page d'acceuil.
-Un fichier play.php s'occupe de récupérer dans l'url les variables correspondant à la catégorie dans la quelle on est et le niveau actuel, le fichier sert aussi a afficher les éléments basiques de la page qui ne changent pas selon les niveaux. play.php appelle le fichier play.js qui lui s'occupe de chargé le niveau dans lequel on est et les éléments dynamiques de la page c'est a dire la grille, les instruction et le menu horizontal. Ce ficher play.js va a partir du paramètre dans l'url qui indique le niveau qu'il doit charger aller chercher dans le repertoire corresondant a la catégorie dans laquelle ont est, le fichier .json correspondant. Du fichier .json il va extraire les information pour charger le lvl, c'est ce fichier .json que vous pouvez créé pour faire un niveau.
+Un fichier play.php s'occupe de récupérer dans l'url les variables correspondant à la catégorie dans la quelle on est et le niveau actuel, le fichier sert aussi a afficher les éléments basiques de la page qui ne changent pas selon les niveaux. play.php appelle le fichier play.js qui lui s'occupe de chargé le niveau dans lequel on est et les éléments dynamiques de la page c'est a dire la grille, les instruction et le menu horizontal. Ce ficher play.js va a partir du paramètre dans l'url qui indique le niveau qu'il doit charger aller chercher dans le repertoire corresondant a la catégorie dans laquelle ont est, le fichier .json correspondant. Du fichier .json il va extraire les information pour charger le lvl, c'est ce fichier .json que vous pouvez créer pour faire un niveau.
 
 ## Créer un niveau, des parties
 
+
 ### Créer un dossier
+Pour l'instant il n'est pas possible de créer des dossier, il est possible que des dossiers soient créés pour le dépot des niveaux codés par les élèves.
 
 ### Créer un niveau
+Pour créé un niveau, il faut prendre comme base le fichier 01.json donné comme exemple pour la création d'un niveeau et le modifier pour créé le niveau que l'on veut, le fichier est disponible a la racine du projet github.
 
 ### Ajouter un dossier au site
 
