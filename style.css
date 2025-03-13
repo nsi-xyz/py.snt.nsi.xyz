@@ -1,8 +1,4 @@
 #conteneur {
-    /*position:absolute;*/
-    /*top: 42vh;
-    left:30vw;*/
-    /*width:20vw;*/
     aspect-ratio: 1;
     display: grid;
     gap: 0.8vw; 
@@ -11,10 +7,6 @@
 }
 
 instru-js {
-    /*position:absolute;*/
-    /*
-    left:60vw;
-    top:42vh;*/
     font-size: 1.42em;
     margin:0 0 0 20px !important;
     white-space: pre;
@@ -23,13 +15,45 @@ instru-js {
 }
 menu-lvl {
     display: flex;
-    gap:15px
+    gap:15px;
+    flex-wrap: wrap;
 }
 
 .disque {
-    /*height: 80%;*/
     width: 80%;
     aspect-ratio: 1;
     border-radius:50%;
     margin:auto;
+}
+.pave-tact {
+    display:none;
+    margin-left:auto;
+    margin-right:15%;
+    margin-top:60px;
+    aspect-ratio: 1;
+    /*display: grid;*/
+    gap: 0vw; 
+    align-items: center;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.fleche {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    background-color: rgb(220,220,220);
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    user-select: none;
+}
+.fleche:hover {
+    cursor: pointer;
+}
+
+@media screen and (max-width:815px) and (orientation:portrait) {
+    .pave-tact {
+        display: grid;    
+    }
 }

@@ -39,8 +39,8 @@
 	"        down()",
 	"    else:",
 	"        up()",
-	"        if ⚪:",
-	"            down():",
+	"    if ⚪:",
+	"        down()",
 	"left()",
 	"for _ in range(4):",
 	"    up()"		

@@ -81,8 +81,19 @@ if (is_dir($directory)) {
         <instru-js></instru-js>
         </div>
         </div>
-        <!--<button onclick="reset();" id ="reset">Reset</button>-->
-
+        <div class="pure-g">
+      <div class="pure-u-2-5 pave-tact">
+        <div></div>
+        <div class="fleche" id="ArrowUp">⇧</div>
+        <div></div>
+        <div class="fleche" id="ArrowLeft">⇦</div>
+        <div></div>
+        <div class="fleche" id="ArrowRight">⇨</div>
+        <div></div>
+        <div class="fleche" id="ArrowDown">⇩</div>
+        <div></div>
+      </div>
+      </div>
     </div>
   </div>
   <script>

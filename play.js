@@ -1,3 +1,7 @@
+let ArrowUp = document.getElementById('ArrowUp')
+let ArrowLeft = document.getElementById('ArrowLeft')
+let ArrowRight = document.getElementById('ArrowRight')
+let ArrowDown = document.getElementById('ArrowDown')
 let pos
 let t_grille = 5
 let grille = [];
@@ -24,6 +28,7 @@ if (localStorage.getItem('lvl') !== null) {
     localStorage.setItem('lvl',JSON.stringify(lvl))
 };
 
+/*document.getElementById('essai').innerHTML = "Résolution CSS (px) : " + window.innerWidth + " x " + window.innerHeight*/
 
 
 for (let i = 0;i<t_grille;i++) {
@@ -62,10 +67,11 @@ class case_js extends HTMLElement {
                         } else {
                             test.innerHTML = set_g[t_grille*i+j]
                             test.classList.add('emoji')
-                            style.innerHTML += `#case${i*t_grille+j+1} {justify-content:center;align-items:center;display:flex; font-size:2.2em;}`
+                            style.innerHTML += `#case${i*t_grille+j+1} {justify-content:center;align-items:center;display:flex;}`
                         }
                         conteneur.appendChild(style)
                         dic_affich[`${j},${i}`]=document.getElementById(`case${i*t_grille+j+1}`);
+                        ajusterTailleEmoji()
                     };
                 };
             },)
@@ -90,39 +96,33 @@ class instru_js extends HTMLElement {
                         while (consignes[i].slice(space,space+1) === " ") {
                             space++;
                         }   
-                        console.log('space',space)
                     }
-                    if (consignes[i].slice(space,space+2) === 'if' || consignes[i].slice(space,space+4) === 'elif') {
-                        console.log('true')
-                        let ifelif =0
+                    if (consignes[i].slice(space,space+2) === 'if' || consignes[i].slice(space,space+4) === 'elif' || consignes[i].slice(space,space+5) === 'while') {
+                        let ifelif = 0
                         if (consignes[i].slice(space,space+4) === 'elif') {
                             ifelif = 2
+                        } else if (consignes[i].slice(space,space+5) === 'while') {
+                            ifelif = 3
                         }
                         if (consignes[i].slice(space+3+ifelif,space+6+ifelif) === 'not') {
                             let couleur=consignes[i].slice(space+7+ifelif,consignes[i].indexOf(":"))
-                            console.log(couleur)
                             let posi = consignes[i].indexOf(couleur)
                             let str = consignes[i].slice(0,posi)
-                            console.log(str)
                             if (avec_emo(couleur)) {
                                 str=str+`<div style='height:15px;width:15px;display:inline-block;'>${couleur}</div>`+" :"
                             } else {
                                 str=str+`<div style='height:15px;width:15px;background-color:${couleur};border-radius:50%;display:inline-block;'></div>`+":"
                             }
-                            console.log(str)
                             test.innerHTML = str
                         } else {
                             let couleur=consignes[i].slice(space+3+ifelif,consignes[i].indexOf(":"))
-                            console.log(couleur)
                             let posi = consignes[i].indexOf(couleur)
                             let str = consignes[i].slice(0,posi)
-                            console.log(str)
                             if (avec_emo(couleur)) {
                                 str=str+`<div style='height:15px;width:15px;display:inline-block;'>${couleur}</div>`+" :"
                             } else {
                                 str=str+`<div style='height:15px;width:15px;background-color:${couleur};border-radius:50%;display:inline-block;'></div>`+":"
                             }
-                            console.log(str)
                             test.innerHTML = str
                         }
                     } else {
@@ -203,10 +203,11 @@ function affich_gr(move,color) {
         if (avec_emo(color)) {
             dic_affich[String(pos)].innerHTML=color
             dic_affich[String(pos)].style.backgroundColor="#FFFFFF"
-            dic_affich[String(pos)].style.fontSize="2.2em"
+            dic_affich[String(pos)].classList.add('.emoji')
             dic_affich[String(pos)].style.justifyContent="center"
             dic_affich[String(pos)].style.display="flex"
             dic_affich[String(pos)].style.alignItems="center"
+            ajusterTailleEmoji()
         } else {
             dic_affich[String(pos)].style.backgroundColor=color
         }
@@ -216,11 +217,25 @@ function affich_gr(move,color) {
 
 function lvl_jeu(matrice_lvl) {
     let prog = 0;
-    document.addEventListener("keyup",jeu);
+    ArrowUp.addEventListener("click",take_key)
+    ArrowLeft.addEventListener("click",take_key)
+    ArrowRight.addEventListener("click",take_key)
+    ArrowDown.addEventListener("click",take_key)
+    document.addEventListener("keyup",take_key);
+    function take_key(event) {
+        console.log(event);
+        if (event instanceof KeyboardEvent) {
+            jeu(event.key)
+        } else if (event instanceof PointerEvent) {
+            jeu(event.target.id)
+        }
+        
+    }
     function jeu(event) {
-        if (event.key==="ArrowUp" || event.key==="ArrowDown" || event.key==="ArrowRight" || event.key==="ArrowLeft") {
-            if (event['key']===matrice_lvl[prog] && prog+1===matrice_lvl.length) {
-                affich_gr(event['key'],"#7CB342");
+        console.log(event)
+        if (event==="ArrowUp" || event==="ArrowDown" || event==="ArrowRight" || event==="ArrowLeft") {
+            if (event===matrice_lvl[prog] && prog+1===matrice_lvl.length) {
+                affich_gr(event,"#7CB342");
                 if (!lvl[inelem].includes(niv)) {
                     lvl[inelem].push(niv)
                 }
@@ -228,18 +243,18 @@ function lvl_jeu(matrice_lvl) {
                     lvl[inelem].push(0)
                 }
                 localStorage.setItem("lvl",JSON.stringify(lvl))
-                document.removeEventListener("keyup",jeu);
+                document.removeEventListener("keyup",take_key);/*comment l'utiliserr?*/
                 if (niv < jsonFilesCount) {
                     wait(1500,lvl[inelem][lvl[inelem].length-1]+1)
                 } else  {
                     wait(1500)
                 }
-            } else if (event['key']!==matrice_lvl[prog]) {
-                affich_gr(event['key'],'⛔')
-                document.removeEventListener("keyup",jeu);
+            } else if (event!==matrice_lvl[prog]) {
+                affich_gr(event,'⛔')
+                document.removeEventListener("keyup",take_key);
                 wait(1500)
-            } else if (event['key']===matrice_lvl[prog]) {
-                affich_gr(event['key'],'');
+            } else if (event===matrice_lvl[prog]) {
+                affich_gr(event,'');
             };
             prog++;
         }
@@ -272,15 +287,15 @@ function avec_emo(str) {
 }
 
 function ajusterTailleEmoji() {
-    console.log("ousp")
-    const items = document.querySelectorAll('.emoji');
-    items.forEach(item => {
-    if (item.textContent.trim()) { // Vérifie que le div contient bien un emoji
-        const size = item.clientWidth; // Taille du carré
-        console.log(size)
-        item.style.fontSize = `${size * 0.9}px`; // Ajuste la taille de l'emoji
-    }
-    });
+    setInterval(() => {
+        const items = document.querySelectorAll('.emoji');
+        items.forEach(item => {
+        if (item.textContent.trim()) { 
+            const size = document.getElementById("case1").clientWidth; 
+            item.style.fontSize = `${size * 0.90}px`; 
+        }
+        });
+    }, 500)
 }
 
 fetch(`./${inelem}/00.json`)
@@ -311,11 +326,9 @@ if (lvl['function'][lvl['function'].length-1]===0) {
     document.getElementById('function').querySelector('a').textContent="🟢 Les fonctions"
 }
 if (document.getElementById(inelem).classList.contains('menu-ko')) {
-    console.log('jsp')
     document.getElementById(inelem).classList.remove('menu-ko')
     document.getElementById(inelem).classList.add('menu-now-ko')
 } else {
-    console.log('pourquoi')
     document.getElementById(inelem).classList.remove('menu-ok')
     document.getElementById(inelem).classList.add('menu-now-ok')
 }
@@ -334,7 +347,6 @@ fetch(`./${inelem}/${window.jsonFile}`)
         let sens = 1
         let zoom = 0
         var actu = String(pos)
-        console.log("oui",String(pos))
         stop = setInterval(() => {
             if (actu!==String(pos)) {
                 dic_affich[actu].style.transform=`scale(${1})`
@@ -354,6 +366,40 @@ fetch(`./${inelem}/${window.jsonFile}`)
     });
 
 /*
-symbole quand l'on gagne
 mieux placer les instruction du script
+*/
+addEventListener('load',ajusterTailleEmoji)
+/*
+      MOV R0,#42
+      MOV R1,#42
+      MOV R2,#0
+      CMP R2,R1
+      BLT mult
+mult:
+      ADD R4,R4,R0
+      ADD R2,R2,#1
+      CMP R2,R1
+      BLT mult
+      B end
+end:
+      STR R4,50
+      HALT*/
+
+/*
+      MOV R0,#17
+      MOV R1,#2
+      MOV R2,#0
+      CMP R0,R1
+      BLT end
+      B divi
+divi:
+      SUB R0,R0,R1
+      ADD R2,R2,#1
+      CMP R0,R1
+      BLT end
+      B divi
+end:
+      STR R2,45
+      STR R0,50
+      HALT
 */
