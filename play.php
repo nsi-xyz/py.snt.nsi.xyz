@@ -30,6 +30,19 @@ if (is_dir($directory)) {
     // Compter les fichiers valides
     $jsonFilesCount = count($files);
 }
+
+$devJsonFilesCount = 0;
+$devDirectory = __DIR__ . "/dev";
+
+if (is_dir($devDirectory)) {
+    $devFiles = glob($devDirectory . "/[0-9][0-9].json");
+    $devFiles = array_filter($devFiles, function($file) {
+        return basename($file) !== '00.json';
+    });
+
+    $devJsonFilesCount = count($devFiles);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -56,6 +69,7 @@ if (is_dir($directory)) {
             <li class="menu-ko" id="loop"><a href="https://python.snt.nsi.xyz/play.php?r=loop&p=1" class="pure-menu-link">🟠 Les boucles</a></li>
             <li class="menu-ko" id="condition"><a href="https://python.snt.nsi.xyz/play.php?r=condition&p=1" class="pure-menu-link">🟠 Les tests conditionnels</a></li>
             <li class="menu-ko" id="function"><a href="https://python.snt.nsi.xyz/play.php?r=function&p=1" class="pure-menu-link">🟠 Les fonctions</a></li>
+            <li class="menu-ko" id="dev"><a href="https://python.snt.nsi.xyz/play.php?r=dev&p=1" class="pure-menu-link">🟠 Dev</a></li>
             <li class="pure-menu-item-help"><a href="https://github.com/nsi-xyz/py.snt.nsi.xyz" class="pure-menu-link">🔷 Créer un niveau</a></li>
           </ul>
       </div>            <div class="menu-bottom"><li class="pure-menu-item-timer">Il reste <timer>60</timer> minutes</li>
@@ -100,6 +114,7 @@ if (is_dir($directory)) {
         // Définir les variables JS
         window.jsonFile = "<?php echo basename($jsonFile); ?>";
         window.jsonFilesCount = <?php echo $jsonFilesCount; ?>;
+        window.devJsonFilesCount = <?php echo $devJsonFilesCount; ?>;
         window.p=<?php echo $p; ?>;
         window.r="<?php echo $r; ?>"
     </script>

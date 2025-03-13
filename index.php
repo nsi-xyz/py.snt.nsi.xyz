@@ -1,3 +1,20 @@
+<?php
+
+$devJsonFilesCount = 0;
+$devDirectory = __DIR__ . "/dev";
+
+if (is_dir($devDirectory)) {
+    $devFiles = glob($devDirectory . "/[0-9][0-9].json");
+    $devFiles = array_filter($devFiles, function($file) {
+        return basename($file) !== '00.json';
+    });
+
+    $devJsonFilesCount = count($devFiles);
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +37,7 @@
             <li class="menu-ko" id="loop"><a href="https://python.snt.nsi.xyz/play.php?r=loop&p=1" class="pure-menu-link">🟠 Les boucles</a></li>
             <li class="menu-ko" id="condition"><a href="https://python.snt.nsi.xyz/play.php?r=condition&p=1" class="pure-menu-link">🟠 Les tests conditionnels</a></li>
             <li class="menu-ko" id="function"><a href="https://python.snt.nsi.xyz/play.php?r=function&p=1" class="pure-menu-link">🟠 Les fonctions</a></li>
+            <li class="menu-ko" id="dev"><a href="https://python.snt.nsi.xyz/play.php?r=dev&p=1" class="pure-menu-link">🟠 Dev</a></li>
             <li class="pure-menu-item-help"><a href="https://github.com/nsi-xyz/py.snt.nsi.xyz" class="pure-menu-link">🔷 Créer un niveau</a></li>
           </ul>
       </div>            <div class="menu-bottom"><li class="pure-menu-item-timer">Il reste <timer>60</timer> minutes</li>
@@ -77,6 +95,8 @@ function updateTimer() {
 }
 
 setInterval(updateTimer, 60000);
+window.devJsonFilesCount = <?php echo $devJsonFilesCount; ?>;
+
 let lvl = JSON.parse(localStorage.getItem('lvl'))
 if (lvl['start'][lvl['start'].length-1]===0) {
     document.getElementById('start').classList.remove('menu-ko')
@@ -97,6 +117,16 @@ if (lvl['function'][lvl['function'].length-1]===0) {
     document.getElementById('function').classList.remove('menu-ko')
     document.getElementById('function').classList.add('menu-ok')
     document.getElementById('function').querySelector('a').textContent="🟢 Les fonctions"
+}
+if (lvl['dev'][lvl['dev'].length-1]===0) {
+    document.getElementById('dev').classList.remove('menu-ko')
+    document.getElementById('dev').classList.add('menu-ok')
+    document.getElementById('dev').querySelector('a').textContent="🟢 Dev"
+}
+if (window.devJsonFilesCount>1) {
+    document.getElementById('dev').style.display = 'block'
+} else {
+    document.getElementById('dev').style.display = 'none'
 }
 </script>
 </body></html>

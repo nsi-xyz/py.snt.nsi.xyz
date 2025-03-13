@@ -24,7 +24,7 @@ if (localStorage.getItem('lvl') !== null) {
 	lvl = JSON.parse(localStorage.getItem('lvl'))
     localStorage.setItem('lvl',JSON.stringify(lvl))
 } else {
-	lvl = {"start":[], "loop":[], "condition":[], "function":[]};
+	lvl = {"start":[], "loop":[], "condition":[], "function":[], "dev":[]};
     localStorage.setItem('lvl',JSON.stringify(lvl))
 };
 
@@ -324,6 +324,15 @@ if (lvl['function'][lvl['function'].length-1]===0) {
     document.getElementById('function').classList.remove('menu-ko')
     document.getElementById('function').classList.add('menu-ok')
     document.getElementById('function').querySelector('a').textContent="🟢 Les fonctions"
+}
+if (lvl['dev'][lvl['dev'].length-1]===0) {
+    document.getElementById('dev').classList.remove('menu-ko')
+    document.getElementById('dev').classList.add('menu-ok')
+    document.getElementById('dev').querySelector('a').textContent="🟢 Dev"
+}
+
+if (window.devJsonFilesCount>1) {
+    document.getElementById("dev").style.display = 'block'
 }
 if (document.getElementById(inelem).classList.contains('menu-ko')) {
     document.getElementById(inelem).classList.remove('menu-ko')

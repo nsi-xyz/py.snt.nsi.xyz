@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+#dev {
+    display:none;
+}
+
 instru-js {
     font-size: 1.42em;
     margin:0 0 0 20px !important;
