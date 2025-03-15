@@ -6,7 +6,8 @@
         "utiliser les flèches unicodes pour représenter les déplacements (←↑→↓)"],
         "grille":["la grille permet de rentrer soit des couleurs de fond en hexadécimal pour une case",
         "soit de rentrer un émoji qui sera affiché tel quel dans le niveau a la place du cercle par défaut"],
-        "script":"écrire le script avec une ligne par str, écrire les mots clef en anglais et respecter les tabulations"
+        "script":["écrire le script avec une ligne par str, écrire les mots clef en anglais et respecter les tabulations",
+        "pour les conditions (if, while...) dans le script on peut d'écrire une couleur en hexadécumal elle sera rendu en un rond de la couleur"]
     },
     "position_depart":
     [
