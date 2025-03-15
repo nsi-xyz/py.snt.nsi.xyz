@@ -201,9 +201,10 @@ function affich_gr(move,color) {
     };
     if (color) {
         if (avec_emo(color)) {
+            console.log(dic_affich[String(pos)])
             dic_affich[String(pos)].innerHTML=color
             dic_affich[String(pos)].style.backgroundColor="#FFFFFF"
-            dic_affich[String(pos)].classList.add('.emoji')
+            dic_affich[String(pos)].classList.add('emoji')
             dic_affich[String(pos)].style.justifyContent="center"
             dic_affich[String(pos)].style.display="flex"
             dic_affich[String(pos)].style.alignItems="center"
@@ -243,7 +244,7 @@ function lvl_jeu(matrice_lvl) {
                     lvl[inelem].push(0)
                 }
                 localStorage.setItem("lvl",JSON.stringify(lvl))
-                document.removeEventListener("keyup",take_key);/*comment l'utiliserr?*/
+                document.removeEventListener("keyup",take_key);
                 if (niv < jsonFilesCount) {
                     wait(1500,lvl[inelem][lvl[inelem].length-1]+1)
                 } else  {
@@ -287,8 +288,10 @@ function avec_emo(str) {
 }
 
 function ajusterTailleEmoji() {
+    console.log('es')
     setInterval(() => {
         const items = document.querySelectorAll('.emoji');
+        console.log(items.length)
         items.forEach(item => {
         if (item.textContent.trim()) { 
             const size = document.getElementById("case1").clientWidth; 
