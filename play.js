@@ -201,7 +201,6 @@ function affich_gr(move,color) {
     };
     if (color) {
         if (avec_emo(color)) {
-            console.log(dic_affich[String(pos)])
             dic_affich[String(pos)].innerHTML=color
             dic_affich[String(pos)].style.backgroundColor="#FFFFFF"
             dic_affich[String(pos)].classList.add('emoji')
@@ -224,7 +223,6 @@ function lvl_jeu(matrice_lvl) {
     ArrowDown.addEventListener("click",take_key)
     document.addEventListener("keyup",take_key);
     function take_key(event) {
-        console.log(event);
         if (event instanceof KeyboardEvent) {
             jeu(event.key)
         } else if (event instanceof PointerEvent) {
@@ -233,7 +231,6 @@ function lvl_jeu(matrice_lvl) {
         
     }
     function jeu(event) {
-        console.log(event)
         if (event==="ArrowUp" || event==="ArrowDown" || event==="ArrowRight" || event==="ArrowLeft") {
             if (event===matrice_lvl[prog] && prog+1===matrice_lvl.length) {
                 affich_gr(event,"#7CB342");
@@ -288,10 +285,8 @@ function avec_emo(str) {
 }
 
 function ajusterTailleEmoji() {
-    console.log('es')
     setInterval(() => {
         const items = document.querySelectorAll('.emoji');
-        console.log(items.length)
         items.forEach(item => {
         if (item.textContent.trim()) { 
             const size = document.getElementById("case1").clientWidth; 
