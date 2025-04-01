@@ -63,13 +63,13 @@ if (is_dir($devDirectory)) {
     </a>
     <div id="menu">
       <div class="pure-menu">
-        <a class="pure-menu-heading" href="https://python.snt.nsi.xyz/index.php">Découvrir Python au lycée</a>
+        <a class="pure-menu-heading" onclick="link_acceuil();" onmouseover="this.style.cursor='pointer'">Découvrir Python au lycée</a>
           <ul class="pure-menu-list">
-            <li class="menu-ko" id="start"><a href="https://python.snt.nsi.xyz/play.php?r=start&p=1" class="pure-menu-link">🟠 Débuter</a></li>
-            <li class="menu-ko" id="loop"><a href="https://python.snt.nsi.xyz/play.php?r=loop&p=1" class="pure-menu-link">🟠 Les boucles</a></li>
-            <li class="menu-ko" id="condition"><a href="https://python.snt.nsi.xyz/play.php?r=condition&p=1" class="pure-menu-link">🟠 Les tests conditionnels</a></li>
-            <li class="menu-ko" id="function"><a href="https://python.snt.nsi.xyz/play.php?r=function&p=1" class="pure-menu-link">🟠 Les fonctions</a></li>
-            <li class="menu-ko" id="dev"><a href="https://python.snt.nsi.xyz/play.php?r=dev&p=1" class="pure-menu-link">🟠 Dev</a></li>
+            <li class="menu-ko" id="start"><a onclick="link_start();"  onmouseover="this.style.cursor='pointer'" class="pure-menu-link">🟠 Débuter</a></li>
+            <li class="menu-ko" id="loop"><a onclick="link_loop();" onmouseover="this.style.cursor='pointer'" class="pure-menu-link">🟠 Les boucles</a></li>
+            <li class="menu-ko" id="condition"><a onclick="link_condition();" onmouseover="this.style.cursor='pointer'" class="pure-menu-link">🟠 Les tests conditionnels</a></li>
+            <li class="menu-ko" id="function"><a onclick="link_function();" onmouseover="this.style.cursor='pointer'" class="pure-menu-link">🟠 Les fonctions</a></li>
+            <li class="menu-ko" id="dev"><a onclick="link_dev();" onmouseover="this.style.cursor='pointer'" class="pure-menu-link">🟠 Dev</a></li>
             <li class="pure-menu-item-help"><a href="https://github.com/nsi-xyz/py.snt.nsi.xyz" class="pure-menu-link">🔷 Créer un niveau</a></li>
           </ul>
       </div>            <div class="menu-bottom"><li class="pure-menu-item-timer">Il reste <timer>60</timer> minutes</li>

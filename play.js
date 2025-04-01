@@ -156,8 +156,12 @@ class menu_lvl extends HTMLElement {
             }
             if (niv === i+1) {
                 test.classList.add('now')
-             }
-            test.setAttribute("onclick", `location.href='https://python.snt.nsi.xyz/play.php?r=${inelem}&p=${i+1}'`);
+            }
+            let act_url=window.location.href
+            let pos_inter=act_url.indexOf("?")
+            let url_fin=act_url.slice(0,pos_inter)+`?r=${inelem}&p=${i+1}`
+            console.log(url_fin)
+            test.setAttribute("onclick", `location.href='${url_fin}'`);
             this.appendChild(test)
         }
         
@@ -270,7 +274,11 @@ function wait(ms,n_lvl=0) {
     if (n_lvl===0) { 
         setTimeout(() => {window.location.reload()}, ms);
     } else {
-        setTimeout(() => {window.location.href=`https://python.snt.nsi.xyz/play.php?r=${inelem}&p=${n_lvl}`}, ms);
+        let act_url=window.location.href
+        let pos_inter=act_url.indexOf("?")
+        let url_fin=act_url.slice(0,pos_inter)+`?r=${inelem}&p=${n_lvl}`
+        console.log(url_fin)
+        setTimeout(() => {window.location.href=`${url_fin}`}, ms);
     }
 };
 
@@ -376,6 +384,49 @@ fetch(`./${inelem}/${window.jsonFile}`)
 mieux placer les instruction du script
 */
 addEventListener('load',ajusterTailleEmoji)
+function link_start() {
+    let act_url=window.location.href
+    let pos_inter=act_url.indexOf("?")
+    let url_fin=act_url.slice(0,pos_inter)+`?r=start&p=1`
+    console.log(url_fin)
+    window.location.href=url_fin
+}
+function link_loop() {
+    let act_url=window.location.href
+    let pos_inter=act_url.indexOf("?")
+    let url_fin=act_url.slice(0,pos_inter)+`?r=loop&p=1`
+    console.log(url_fin)
+    window.location.href=url_fin
+}
+function link_condition() {
+    let act_url=window.location.href
+    let pos_inter=act_url.indexOf("?")
+    let url_fin=act_url.slice(0,pos_inter)+`?r=condition&p=1`
+    console.log(url_fin)
+    window.location.href=url_fin
+}
+function link_function() {
+    let act_url=window.location.href
+    let pos_inter=act_url.indexOf("?")
+    let url_fin=act_url.slice(0,pos_inter)+`?r=function&p=1`
+    console.log(url_fin)
+    window.location.href=url_fin
+}
+function link_dev() {
+    let act_url=window.location.href
+    let pos_inter=act_url.indexOf("?")
+    let url_fin=act_url.slice(0,pos_inter)+`?r=dev&p=1`
+    console.log(url_fin)
+    window.location.href=url_fin
+}
+function link_acceuil() {
+    let act_url=window.location.href
+    let pos_inter=act_url.indexOf("?")
+    let url_fin=act_url.slice(0,pos_inter-8)+`index.php`
+    console.log(url_fin)
+    window.location.href=url_fin
+}
+
 /*
       MOV R0,#42
       MOV R1,#42
