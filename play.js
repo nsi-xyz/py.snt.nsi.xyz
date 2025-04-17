@@ -1,3 +1,4 @@
+const cssColorKeywords = ["aliceblue", "antiquewhite", "aqua", "aquamarine", "azure","beige", "bisque", "black", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood","cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "cyan","darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki","darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon","darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet","deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue","firebrick", "floralwhite", "forestgreen", "fuchsia","gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey","honeydew", "hotpink","indianred", "indigo", "ivory","khaki","lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan","lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon","lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue","lightyellow", "lime", "limegreen", "linen","magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple","mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred","midnightblue", "mintcream", "mistyrose", "moccasin","navajowhite", "navy","oldlace", "olive", "olivedrab", "orange", "orangered", "orchid","palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru","pink", "plum", "powderblue", "purple","rebeccapurple", "red", "rosybrown", "royalblue","saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue","slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue","tan", "teal", "thistle", "tomato", "turquoise","violet","wheat", "white", "whitesmoke","yellow", "yellowgreen"];
 let ArrowUp = document.getElementById('ArrowUp')
 let ArrowLeft = document.getElementById('ArrowLeft')
 let ArrowRight = document.getElementById('ArrowRight')
@@ -84,7 +85,7 @@ class instru_js extends HTMLElement {
         fetch(`./${inelem}/${window.jsonFile}`) 
             .then(res => res.json())
             .then(infos => {
-                let consignes = infos["script"]
+                let consignes = infos["script"];
                 for (let i = 0;i<infos["parcours"][0].length;i++) { 
                     parcours.push(traduc_parcours[infos["parcours"][0][i]])
                 }
@@ -115,13 +116,15 @@ class instru_js extends HTMLElement {
                             }
                             test.innerHTML = str
                         } else {
-                            let couleur=consignes[i].slice(space+3+ifelif,consignes[i].indexOf(":"))
+                            let couleur = consignes[i].slice(space+3+ifelif,consignes[i].indexOf(":"))
                             let posi = consignes[i].indexOf(couleur)
                             let str = consignes[i].slice(0,posi)
                             if (avec_emo(couleur)) {
                                 str=str+`<div style='height:15px;width:15px;display:inline-block;'>${couleur}</div>`+" :"
-                            } else {
+                            } else if (couleur[0]==="#" || cssColorKeywords.includes(couleur)) {
                                 str=str+`<div style='height:15px;width:15px;background-color:${couleur};border-radius:50%;display:inline-block;'></div>`+":"
+                            } else {
+                                str = consignes[i]
                             }
                             test.innerHTML = str
                         }
@@ -160,7 +163,6 @@ class menu_lvl extends HTMLElement {
             let act_url=window.location.href
             let pos_inter=act_url.indexOf("?")
             let url_fin=act_url.slice(0,pos_inter)+`?r=${inelem}&p=${i+1}`
-            console.log(url_fin)
             test.setAttribute("onclick", `location.href='${url_fin}'`);
             this.appendChild(test)
         }
@@ -220,6 +222,12 @@ function affich_gr(move,color) {
 
 
 function lvl_jeu(matrice_lvl) {
+    window.addEventListener('keydown', function(e) {
+        const keysToBlock = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'PageUp', 'PageDown'];
+        if (keysToBlock.includes(e.key)) {
+            e.preventDefault();
+        }
+    });
     let prog = 0;
     ArrowUp.addEventListener("click",take_key)
     ArrowLeft.addEventListener("click",take_key)
@@ -240,10 +248,10 @@ function lvl_jeu(matrice_lvl) {
                 affich_gr(event,"#7CB342");
                 if (!lvl[inelem].includes(niv)) {
                     lvl[inelem].push(niv)
-                }
+                }/*
                 if (lvl[inelem].length===window.jsonFilesCount) {
                     lvl[inelem].push(0)
-                }
+                }*/
                 localStorage.setItem("lvl",JSON.stringify(lvl))
                 document.removeEventListener("keyup",take_key);
                 if (niv < jsonFilesCount) {
@@ -277,7 +285,6 @@ function wait(ms,n_lvl=0) {
         let act_url=window.location.href
         let pos_inter=act_url.indexOf("?")
         let url_fin=act_url.slice(0,pos_inter)+`?r=${inelem}&p=${n_lvl}`
-        console.log(url_fin)
         setTimeout(() => {window.location.href=`${url_fin}`}, ms);
     }
 };
@@ -311,27 +318,27 @@ fetch(`./${inelem}/00.json`)
     },)
 
 
-if (lvl['start'][lvl['start'].length-1]===0) {
+if (lvl['start'].length===window.startJsonFilesCount) {
     document.getElementById('start').classList.remove('menu-ko')
     document.getElementById('start').classList.add('menu-ok')
     document.getElementById('start').querySelector('a').textContent="🟢 Débuter"
 }
-if (lvl['loop'][lvl['loop'].length-1]===0) {
+if (lvl['loop'].length===window.loopJsonFilesCount) {
     document.getElementById('loop').classList.remove('menu-ko')
     document.getElementById('loop').classList.add('menu-ok')
     document.getElementById('loop').querySelector('a').textContent="🟢 Les boucles"
 }
-if (lvl['condition'][lvl['condition'].length-1]===0) {
+if (lvl['condition'].length===window.conditionJsonFilesCount) {
     document.getElementById('condition').classList.remove('menu-ko')
     document.getElementById('condition').classList.add('menu-ok')
     document.getElementById('condition').querySelector('a').textContent="🟢 Les tests conditionnels"
 }
-if (lvl['function'][lvl['function'].length-1]===0) {
+if (lvl['function'].length===window.functionJsonFilesCount) {
     document.getElementById('function').classList.remove('menu-ko')
     document.getElementById('function').classList.add('menu-ok')
     document.getElementById('function').querySelector('a').textContent="🟢 Les fonctions"
 }
-if (lvl['dev'][lvl['dev'].length-1]===0) {
+if (lvl['dev'].length===window.devJsonFilesCount) {
     document.getElementById('dev').classList.remove('menu-ko')
     document.getElementById('dev').classList.add('menu-ok')
     document.getElementById('dev').querySelector('a').textContent="🟢 Dev"
@@ -381,8 +388,9 @@ fetch(`./${inelem}/${window.jsonFile}`)
     });
 
 /*
-mieux placer les instruction du script
+faire taille instructions différente selon la longueur du script
 */
+
 addEventListener('load',ajusterTailleEmoji)
 
 /*
