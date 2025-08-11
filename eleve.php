@@ -1,40 +1,4 @@
 <?php
-// Récupérer les paramètres r et p dans l'URL
-$r = isset($_GET['r']) ? preg_replace('/[^a-zA-Z0-9_]/', '', $_GET['r']) : '';
-$p = isset($_GET['p']) ? intval($_GET['p']) : 0;
-
-// Vérifier que les paramètres sont valides
-if (!$r || $p <= 0) {
-    die("Paramètres invalides");
-}
-
-// Construire le chemin du fichier JSON
-$directory = __DIR__ . "/$r";
-$jsonFile = sprintf("%s/%02d.json", $directory, $p);
-
-// Vérifier si le fichier JSON existe
-if (!file_exists($jsonFile)) {
-    if ($p>1) {
-        header("Location: play.php?r=$r&p=1");
-    } else {
-        die("Fichier JSON introuvable");
-    }
-}
-
-$jsonFilesCount = 0;
-if (is_dir($directory)) {
-    // Chercher tous les fichiers deux chiffres suivis de ".json"
-    $files = glob($directory . "/[0-9][0-9].json");
-
-    // Filtrer pour exclure "00.json"
-    $files = array_filter($files, function($file) {
-        return basename($file) !== '00.json';
-    });
-
-    // Compter les fichiers valides
-    $jsonFilesCount = count($files);
-}
-
 
 $listdir=array();
 $dirorigin=__DIR__;
@@ -65,6 +29,7 @@ foreach ($listdir as $dir) {
     $eleveJsonFilesCount[] = count($Files);
     }
 }
+
 
 
 $devJsonFilesCount = 0;
@@ -163,7 +128,7 @@ if (isset($_SESSION['id'])) {
   <link rel="stylesheet" href="./css/css2"> 
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="./style.css">
-  <script src="./play.js" defer></script>
+  <script src="./niveleve.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
@@ -183,12 +148,12 @@ if (isset($_SESSION['id'])) {
             <li id="eleve"><a href="./eleve.php" class="pure-menu-link"> </a></li>
             <li class="pure-menu-item menu-item-divided pure-menu-item-login" id="log"><a class="pure-menu-link" href="./login.php">&#x1F464; Se connecter</a></li>
             <li class="pure-menu-item menu-item-divided pure-menu-item-login" id="gestion" style="display:none;"><a class="pure-menu-link" href="./csession.php" >&#x1F464; Gestion</a></li>
-            <li class="pure-menu-item menu-item-divided menu-session" id="session" style="display:none;"><a class="pure-menu-link" href="" >&#x1F464; Session</a></li>
+            <li class="pure-menu-item menu-item-divided pure-menu-item-login" id="session" style="display:none;"><a class="pure-menu-link" href="" >&#x1F464; Session</a></li>
             <li class="pure-menu-item-help"><a href="https://github.com/nsi-xyz/py.snt.nsi.xyz" class="pure-menu-link">🔷 Créer un niveau</a></li>
           </ul>
       </div>            
       <div class="menu-bottom">
-        <li class="pure-menu-item menu-item-divided pure-menu-item-reset"><div id="pseudo" style="display:none;">🚹 Utilisateur : </div></li>
+        <li class="pure-menu-item-timer" id="pseudo" style="display:none;">🚹 Utilisateur : </li>
         <li class="pure-menu-item-timer" id="timer">Il reste <timer>60</timer> minutes</li>
             <li class="pure-menu-item-reset" id="reset"><a onclick="reset();" class="pure-menu-link" >❌ Effacer / Recommencer</a></li>
         </div>
@@ -201,110 +166,88 @@ if (isset($_SESSION['id'])) {
     
       <div class="content">
         <h2 class="subhead-content">
-          <menu-lvl></menu-lvl>
+            <cons-page></cons-page>
         </h2>
         <h2 class="content-subhead" id="text-intro"></h2>
-      <div class="pure-g">
-      <div class="pure-u-2-5">
-        <const-js id="conteneur"></const-js>
-        </div>
+
         
-      <div class="pure-u-2-5">
-        <instru-js></instru-js>
-        </div>
-        </div>
-        <div class="pure-g">
-      <div class="pure-u-2-5 pave-tact">
-        <div></div>
-        <div class="fleche" id="ArrowUp">⇧</div>
-        <div></div>
-        <div class="fleche" id="ArrowLeft">⇦</div>
-        <div></div>
-        <div class="fleche" id="ArrowRight">⇨</div>
-        <div></div>
-        <div class="fleche" id="ArrowDown">⇩</div>
-        <div></div>
-      </div>
-      </div>
     </div>
   </div>
   <script>
         // Définir les variables JS
         <?php if (isset($row['user_data']) && !is_null($row['user_data'])): ?>
-            console.log("ah")
-            window.lvl=<?= json_encode($row['user_data']); ?>;            
-            localStorage.setItem('lvl',window.lvl)
+            window.lvl=<?= json_encode($row['user_data']); ?>;
             window.nom_u = <?= json_encode($_SESSION['pseudo']) ?>;
             document.getElementById('pseudo').textContent+=window.nom_u
             document.getElementById('pseudo').style.display='block'
         <?php endif; ?>
-        const str = "£rJk6n(ù"
-        window.jsonFile = "<?php echo basename($jsonFile); ?>";
-        window.jsonFilesCount = <?php echo $jsonFilesCount; ?>;
+        window.listdir = <?php echo json_encode($listdir); ?>;
+        window.eleveJsonFilesCount=<?php echo json_encode($eleveJsonFilesCount); ?>;
         window.devJsonFilesCount = <?php echo $devJsonFilesCount; ?>;
         window.startJsonFilesCount = <?php echo $startJsonFilesCount; ?>;
         window.loopJsonFilesCount = <?php echo $loopJsonFilesCount; ?>;
         window.conditionJsonFilesCount = <?php echo $conditionJsonFilesCount; ?>;
         window.functionJsonFilesCount = <?php echo $functionJsonFilesCount; ?>;
-        window.eleveJsonFilesCount=<?php echo json_encode($eleveJsonFilesCount); ?>;
-        window.p=<?php echo $p; ?>;
-        window.r="<?php echo $r; ?>"
         let sum = 0
         for (let i=0;i<eleveJsonFilesCount.length;i++) {
             sum+=eleveJsonFilesCount[i]
         }
         document.getElementById('eleve').querySelector('a').textContent=`💻 Les ${sum} codés`
         <?php if (isset($_SESSION['id'])): ?>
-          window.session=1
-          modif=JSON.parse(localStorage.getItem('lvl'))
-          if (!("co" in modif)) {
-            console.log('sql')
-            modif=JSON.parse(localStorage.getItem('lvl'))
-            modif["co"]=1
-            localStorage.setItem('lvl',modif)
-            signProgress(modif,str)
-            const form = new FormData()
-            form.append('lvl',JSON.stringify(modif))
-            fetch('save_data.php', {
-                method:'POST',
-                body:form
-            })
-          }
-          <?php if ($_SESSION['admin']===1):?>
-              document.getElementById("gestion").style.display='block'
-          <?php endif;?>
           document.getElementById('reset').querySelector('a').textContent="❌ Se déconnecter"
           document.getElementById('timer').style.display='none'
           document.getElementById('log').style.display='none'
-        <?php endif;?>
-        <?php if (isset($_SESSION['delete']) && $_SESSION['delete']===1): ?>
-          localStorage.removeItem('lvl')
-          <?php $_SESSION['delete']=0?>
-        <?php endif;?>
-        <?php if (isset($_SESSION['folder'])):?>
-            //document.getElementById('reset').querySelector('a').textContent="❌ Se déconnecter"
-            document.getElementById('session').style.display="block"
-            document.getElementById('log').style.display='none'
-            window.folder=<?= json_encode($_SESSION['folder']);?>;
-            document.getElementById('session').querySelector('a').href=`./play.php?r=${window.folder}&p=1`
-            if (!document.cookie.includes('userPseudo=')) {
-                const userPseudo = <?= json_encode($_SESSION['pseudo']);?>;
-                document.cookie = `userPseudo=${userPseudo}; path=/; max-age=7200`;
-            }
+          <?php if ($_SESSION['admin']===1):?>
+              document.getElementById("gestion").style.display='block'
+          <?php endif;?>
         <?php endif;?>
         <?php if (isset($_SESSION['session_name'])): ?>
             document.getElementById('reset').querySelector('a').textContent="❌ Sortir de la session"
-            //document.getElementById('timer').style.display='none'
-            //document.getElementById('log').style.display='none'
+            window.folder=<?= json_encode($_SESSION['folder']);?>;
+            document.getElementById('session').querySelector('a').href=`./play.php?r=${window.folder}&p=1`
         <?php endif;?>
-        
-        if (typeof window.session === "undefined") {
-            window.session=0
+        let lvl
+        if (localStorage.getItem('lvl') !== null) {
+	        lvl = JSON.parse(localStorage.getItem('lvl'))
+            localStorage.setItem('lvl',JSON.stringify(lvl))
+        } else {
+	        lvl = {"start":[], "loop":[], "condition":[], "function":[], "dev":[]};
+            localStorage.setItem('lvl',JSON.stringify(lvl))
+        };
+        if (lvl['start'].length===window.startJsonFilesCount) {
+            document.getElementById('start').classList.remove('menu-ko')
+            document.getElementById('start').classList.add('menu-ok')
+            document.getElementById('start').querySelector('a').textContent="🟢 Débuter"
         }
-        function signProgress(lvl,str) {
-            const signature = CryptoJS.HmacSHA256(JSON.stringify(lvl), str).toString();
-            localStorage.setItem("progress_sig", signature);
+        if (lvl['loop'].length===window.loopJsonFilesCount) {
+            document.getElementById('loop').classList.remove('menu-ko')
+            document.getElementById('loop').classList.add('menu-ok')
+            document.getElementById('loop').querySelector('a').textContent="🟢 Les boucles"
         }
+        if (lvl['condition'].length===window.conditionJsonFilesCount) {
+            document.getElementById('condition').classList.remove('menu-ko')
+            document.getElementById('condition').classList.add('menu-ok')
+            document.getElementById('condition').querySelector('a').textContent="🟢 Les tests conditionnels"
+        }
+        if (lvl['function'].length===window.functionJsonFilesCount) {
+            document.getElementById('function').classList.remove('menu-ko')
+            document.getElementById('function').classList.add('menu-ok')
+            document.getElementById('function').querySelector('a').textContent="🟢 Les fonctions"
+        }
+        if (lvl['dev'].length===window.devJsonFilesCount) {
+            document.getElementById('dev').classList.remove('menu-ko')
+            document.getElementById('dev').classList.add('menu-ok')
+            document.getElementById('dev').querySelector('a').textContent="🟢 Dev"
+        }
+        if (window.devJsonFilesCount>1) {
+            document.getElementById('dev').style.display = 'block'
+        } else {
+            document.getElementById('dev').style.display = 'none'
+        }
+        <?php if (isset($_SESSION['folder'])):?>
+          document.getElementById('session').style.display="block"
+          document.getElementById('log').style.display='none'
+        <?php endif;?>
     </script>
   <script src="./css/ui.js"></script>
 <script>

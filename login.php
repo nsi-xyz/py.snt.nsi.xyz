@@ -1,6 +1,5 @@
 <?php
 
-
 $listdir=array();
 $dirorigin=__DIR__;
 $dirpresent=scandir($dirorigin);
@@ -32,7 +31,6 @@ foreach ($listdir as $dir) {
 }
 
 
-
 $devJsonFilesCount = 0;
 $devDirectory = __DIR__ . "/dev";
 
@@ -41,7 +39,6 @@ if (is_dir($devDirectory)) {
     $devFiles = array_filter($devFiles, function($file) {
         return basename($file) !== '00.json';
     });
-
     $devJsonFilesCount = count($devFiles);
 }
 
@@ -93,28 +90,109 @@ if (is_dir($functionDirectory)) {
   $functionJsonFilesCount = count($functionFiles);
 }
 
-include 'base.php';
-
-if (isset($_SESSION['id'])) {
-    $sql=$conn->prepare("SELECT user_data FROM logUsers WHERE id = ?");
-    if ($sql) {
-        $sql->bind_param("s",$_SESSION['id']);
-        if ($sql->execute()) {
+if (include 'base.php') {
+    if ($_SERVER['REQUEST_METHOD']==='POST') {
+        if (isset($_POST['create'])) {
+            global $conn;
+            $username=$_POST['username'];
+            $mdp=trim($_POST['mdp']);
+            $test=$conn->prepare("SELECT user_name FROM logUsers WHERE user_name=?");
+            $test->bind_param("s",$username);
+            $test->execute();
+            $r_test=$test->get_result();
+            if ($r_test->num_rows===0) {
+                $hash_mdp=password_hash($mdp, PASSWORD_DEFAULT);
+                $sql=$conn->prepare("INSERT INTO logUsers (user_name,user_mdp,reg_date) VALUES (?,?,NOW())");
+                if ($sql) {
+                    $sql->bind_param("ss",$username,$hash_mdp);
+                    if ($sql->execute()) {
+                    } else {
+                    }
+                } else {
+                }
+            } else {
+                $erreur=1;
+            }
+        } elseif (isset($_POST['search'])) {
+            global $conn;
+            $username=$_POST['username'];
+            $mdp=trim($_POST['mdp']);
+            $sql=$conn->prepare("SELECT * FROM logUsers WHERE user_name=?");
+            if ($sql) {
+                $sql->bind_param("s",$username);
+                if ($sql->execute()) {
+                    $result=$sql->get_result();
+                    if ($result->num_rows>0) {
+                        $row=$result->fetch_assoc();
+                        if (password_verify($mdp,$row['user_mdp'])) {
+                            $_SESSION['id']=$row['id'];
+                            $_SESSION['pseudo']=$row['user_name'];
+                            $_SESSION['admin']=$row['admin'];
+                            header("Location: play.php?r=start&p=1");
+                        } else {
+                            echo "mdp faux<br>";
+                        }
+                    } else {
+                        echo "le compte n'existe pas<br>";
+                    }
+                } else {
+                }
+            } else {
+            }
+        } elseif (isset($_POST['join'])) {
+            $code_session=$_POST['c_session'];
+            $user_pseudo=$_POST['p_session'];
+            $sql=$conn->prepare("SELECT session_name FROM sessions WHERE statut='active' AND session_code=?");
+            $sql->bind_param("s",$code_session);
+            $sql->execute();
             $result=$sql->get_result();
-            $row=$result->fetch_assoc();
+            if ($result->num_rows === 1) {
+                $row=$result->fetch_assoc();
+                $table_name=$row['session_name'];
+                $test="SELECT user_pseudo FROM `$table_name` WHERE user_pseudo=?";
+                $tests=$conn->prepare($test);
+                $tests->bind_param("s",$user_pseudo);
+                $tests->execute();
+                $test_result=$tests->get_result();
+                if ($test_result->num_rows === 0) {
+                    $join_session="INSERT INTO `$table_name` (user_pseudo,user_last_connexion) VALUES (?,NOW())";
+                    $join=$conn->prepare($join_session);
+                    $join->bind_param("s",$user_pseudo);
+                    if ($join->execute()) {
+                        session_unset();
+                        $sql=$conn->prepare("SELECT folder FROM sessions WHERE session_name=?");
+                        $sql->bind_param("s",$table_name);
+                        $sql->execute();
+                        $response=$sql->get_result();
+                        $folder_concerned=$response->fetch_assoc();
+                        $_SESSION['folder']=$folder_concerned['folder'];
+                        $_SESSION['session_name']=$table_name;
+                        $_SESSION['pseudo']=$user_pseudo;
+                        $folder_session=$_SESSION['folder'];
+                        $_SESSION['delete']=1;
+                        header("Location: play.php?r=$folder_session&p=1");
+                    }
+                } elseif ($test_result->num_rows === 1 && isset($_COOKIE['userPseudo']) && $_COOKIE['userPseudo'] === $user_pseudo) {
+                    $sql=$conn->prepare("SELECT folder FROM sessions WHERE session_name=?");
+                    $sql->bind_param("s",$table_name);
+                    $sql->execute();
+                    $response=$sql->get_result();
+                    $folder_concerned=$response->fetch_assoc();
+                    $_SESSION['folder']=$folder_concerned['folder'];
+                    $_SESSION['session_name']=$table_name;
+                    $_SESSION['pseudo']=$user_pseudo;
+                    $folder_session=$_SESSION['folder'];
+                    $_SESSION['delete']=1;
+                    header("Location: play.php?r=$folder_session&p=1");
+                } else {
+                    $failed=1;
+                }
+            }
         }
     }
-} elseif (isset($_SESSION['session_name'])) {
-    $table_name=$_SESSION['session_name'];
-    $sql="SELECT user_data FROM `$table_name` WHERE user_pseudo=?";
-    $sql=$conn->prepare($sql);
-    $sql->bind_param("s",$_SESSION['pseudo']);
-    if ($sql->execute()) {
-        $result=$sql->get_result();
-        $row=$result->fetch_assoc();
-    }
-
+    $conn->close();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -133,7 +211,7 @@ if (isset($_SESSION['id'])) {
     </a>
     <div id="menu">
       <div class="pure-menu">
-        <a class="pure-menu-heading" href="">Découvrir Python au lycée</a>
+        <a class="pure-menu-heading" href="./index.php">Découvrir Python au lycée</a>
           <ul class="pure-menu-list">
             <li class="menu-ko" id="start"><a href="./play.php?r=start&p=1" class="pure-menu-link">🟠 Débuter</a></li>
             <li class="menu-ko" id="loop"><a href="./play.php?r=loop&p=1" class="pure-menu-link">🟠 Les boucles</a></li>
@@ -143,12 +221,10 @@ if (isset($_SESSION['id'])) {
             <li id="eleve"><a href="./eleve.php" class="pure-menu-link"> </a></li>
             <li class="pure-menu-item menu-item-divided pure-menu-item-login" id="log"><a class="pure-menu-link" href="./login.php">&#x1F464; Se connecter</a></li>
             <li class="pure-menu-item menu-item-divided pure-menu-item-login" id="gestion" style="display:none;"><a class="pure-menu-link" href="./csession.php" >&#x1F464; Gestion</a></li>
-            <li class="pure-menu-item menu-item-divided pure-menu-item-login" id="session" style="display:none;"><a class="pure-menu-link" href="" >&#x1F464; Session</a></li>
             <li class="pure-menu-item-help"><a href="https://github.com/nsi-xyz/py.snt.nsi.xyz" class="pure-menu-link">🔷 Créer un niveau</a></li>
           </ul>
       </div>            
       <div class="menu-bottom">
-        <li class="pure-menu-item-timer" id="pseudo" style="display:none;">🚹 Utilisateur : </li>
         <li class="pure-menu-item-timer" id="timer">Il reste <timer>60</timer> minutes</li>
             <li class="pure-menu-item-reset" id="reset"><a onclick="reset();" class="pure-menu-link">❌ Effacer / Recommencer</a></li>
           </div>
@@ -159,16 +235,64 @@ if (isset($_SESSION['id'])) {
         <h2>Découvrir python en lycée 🐍</h2>
       </div>
       <div class="content">
-        <h2 class="content-subhead">Bienvenue sur python.snt.nsi.xyz ! 🎉</h2>
-        <p class="p-content">Au collège, tu as utilisé Scratch pour programmer avec des blocs. En seconde, tu découvres Python, un langage très utilisé en science et en technologie.<br>Ici, tu ne vas pas écrire de code, mais apprendre à le lire et le comprendre. En observant un programme et en suivant les instructions, tu verras comment un ordinateur exécute du code. Pour cela, tu utiliseras simplement les touches de ton clavier pour te déplacer dans une grille.<br>Prêt à <a href="https://python.snt.nsi.xyz/play.php?r=start&p=1" class="link">débuter sur Python</a> ? 🚀</p>
-        <h2 class="content-subhead">Les boucles : quand Python tourne en rond (mais avec intelligence)</h2>
-        <p class="p-content">Quand un programme exécute plusieurs fois la même action, il ne va pas tout réécrire à la main (il n’a pas que ça à faire, et toi non plus !). Il utilise une boucle : une sorte de tourniquet qui répète des instructions tant qu’on ne lui dit pas d’arrêter.<br>Par exemple, pour avancer de 10 cases, au lieu d’écrire "avance" dix fois, on dit à Python de le faire en boucle. Magique, non ? 🔄✨<br>Tu veux voir ça en action ? C’est par ici 👉 <a href="https://python.snt.nsi.xyz/play.php?r=loop&p=1" class="link">Explorer les boucles</a></p>
-        <h2 class="content-subhead">Les tests conditionnels : quand Python doit faire un choix 🐭🧀</h2>
-        <p class="p-content">Un programme, c’est comme une petite souris face à un morceau de fromage : elle doit décider. Si le fromage est là, elle le grignote. Sinon, elle repart bredouille (ou se fait piéger).<br>En Python, ces choix se font grâce aux tests conditionnels. On pose une question ("Le fromage est-il là ?") et on agit en fonction de la réponse.<br>Prêt à voir Python éviter les pièges ? C’est par ici  👉 <a href="https://python.snt.nsi.xyz/play.php?r=condition&p=1" class="link">Explorer les conditions</a> </p>
-        <h2 class="content-subhead">Les fonctions : quand Python devient un super-héros 🦸‍♂️</h2>
-        <p class="p-content">Un super-héros ne réfléchit pas à chaque fois qu’il doit sauver quelqu’un : il enfile son costume, saute dans l’action et applique ses techniques secrètes. 🦸‍♀️💥<br>En Python, une fonction, c’est pareil : on lui apprend une mission (comme voler ou lancer une toile 🕸️), et ensuite, il suffit de l’appeler pour qu’elle fasse le boulot automatiquement !<br>Prêt à voir Python devenir un héros du code ? C’est par ici 👉 <a href="https://python.snt.nsi.xyz/play.php?r=function&p=1" class="link">Explorer les fonctions</a></p>
-        <h2 class="content-subhead">Amusez-vous !</h2>
-        <p class="p-content">Sur ce site, tu vas apprendre à <a class="link" href="https://python.snt.nsi.xyz/play.php?r=start&p=1">lire et comprendre</a> du code Python en suivant des instructions. En te déplaçant dans une grille avec les flèches, tu verras comment Python <a href="https://python.snt.nsi.xyz/play.php?r=loop&p=1" class="link">utilise des boucles</a>, fait des <a href="https://python.snt.nsi.xyz/play.php?r=condition&p=1" class="link">choix conditionnels</a> et <a href="https://python.snt.nsi.xyz/play.php?r=function&p=1" class="link">exécute des fonctions</a>. À chaque étape, tu suivras les consignes données par le code pour comprendre son fonctionnement. Et ne t’inquiète pas si tu fais une erreur, ce n’est pas grave ! Tu peux toujours recommencer, l’important c’est d’apprendre et de progresser à ton rythme</p>
+      <h2 id="S'identifier" class="content-subhead">S'identifier</h2>
+        <p class="p-content">Créer facilement un compte pour sauvgarder votre progression sur le site et pouvoir la retrouver de n'importe où.</p>
+        <p class="p-content">Vous pouvez aussi juste naviguer sur le site sans vous connecter mais la progression ne sera pas sauvgardée durablement.</p>
+        <msg></msg>
+        <section class="forms">
+                      <div class="form">
+              <form method="POST" class="pure-form pure-form-stacked">
+                <fieldset>
+                  <legend>Se connecter</legend>
+                  <div class="form-group">
+                    <label for="pseudo">Nom d'utilisateur</label>
+                    <input type="text" id="pseudo" name="username" placeholder="Nom d'utilisateur" required pattern="^(?![\-' .])(?!.*[\-'.]{3})(?!.* {2})(?!.*\.\.)(?!.*[\-']$)[A-Za-zÀ-ÖØ-öø-ÿ' .\-]+[.]?$" minlength="3" maxlength="24" />
+                  </div>
+                  <div class="form-group">
+                    <label for="code">Mot de passe</label>
+                    <input type="password" id="code" name="mdp" placeholder="Mot de passe" required minlength="1" />
+                  </div>
+                </fieldset>
+                <button type="submit" class="pure-button pure-button-primary-join" name="search">Connexion</button>
+              </form>
+                          </div>
+            <div class="form">
+              <form method="POST" class="pure-form pure-form-stacked">
+                <fieldset>
+                  <legend>Créer un compte</legend>
+                  <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" placeholder="Nom d'utilisateur" required minlength="3" maxlength="16" />
+                  </div>
+                  <div class="form-group">
+                    <label for="stacked-password">Mot de passe</label>
+                    <input type="password" id="stacked-password" name="mdp" placeholder="Mot de passe" required minlength="1" maxlength="32" />
+                  </div>
+                </fieldset>
+                <button type="submit" class="pure-button pure-button-primary-join" name="create">Créer le compte</button>
+                <div id="alert" style="color:red;display:none;">Ce pseudo existe déjà</div>
+              </form>
+                          </div>
+
+                <div class="form">
+              <form method="POST" class="pure-form pure-form-stacked">
+                <fieldset>
+                  <legend>Rejoindre une session</legend>
+                  <div class="form-group">
+                    <label for="username">Pseudo</label>
+                    <input type="text" name="p_session" placeholder="Pseudo" required minlength="3" maxlength="16" />
+                  </div>
+                  <div class="form-group">
+                    <label for="stacked-password">Code de la session</label>
+                    <input type="text" name="c_session" placeholder="Code de la session" required minlength="1" maxlength="32" />
+                  </div>
+                </fieldset>
+                <button type="submit" class="pure-button pure-button-primary-join" name="join">Rejoindre la session</button>
+                <div id="alert_s" style="color:red;display:none;">Ce pseudo existe déjà</div>
+              </form>
+                          </div>
+                  </section>
+
         </div>
     </div>
     <div class="footer">
@@ -188,7 +312,7 @@ if (isset($_SESSION['id'])) {
     </div>
   </div>
   <script src="./css/ui.js"></script>
-  <script>function reset() {
+  <script> function reset() {
     if (document.getElementById('reset').querySelector('a').textContent==="❌ Effacer / Recommencer") {
         localStorage.removeItem('lvl')
         window.location.reload()
@@ -209,14 +333,18 @@ if (isset($_SESSION['id'])) {
         document.getElementById("gestion").style.display='block'
     <?php endif;?>
 <?php endif;?>
-<?php if (isset($row['user_data']) && !is_null($row['user_data'])): ?>
-    console.log("ah")
-    window.lvl=<?= json_encode($row['user_data']); ?>;            
-    localStorage.setItem('lvl',window.lvl)
-    window.nom_u = <?= json_encode($_SESSION['pseudo']) ?>;
-    document.getElementById('pseudo').textContent+=window.nom_u
-    document.getElementById('pseudo').style.display='block'
-<?php endif; ?>
+<?php if (isset($_SESSION['session_name'])): ?>
+    document.getElementById('reset').querySelector('a').textContent="❌ Sortir de la session"
+    document.getElementById('timer').style.display='none'
+    document.getElementById('log').style.display='none'
+<?php endif;?>
+<?php if (isset($erreur)): ?>
+    document.getElementById('alert').style.display='block'
+<?php endif;?>
+<?php if (isset($failed)): ?>
+    document.getElementById('alert_s').style.display='block'
+<?php endif;?>
+
 val = 60
 document.querySelector("timer").textContent = val.toString().padStart(2, "0")
 const timer = document.querySelector("timer");
@@ -231,23 +359,14 @@ function updateTimer() {
     }
 }
 if (document.getElementById('timer').style.display==='block') {
-  setInterval(updateTimer, 60000);
+    setInterval(updateTimer, 60000);
 }
-<?php if (isset($_SESSION['folder'])):?>
-  document.getElementById('session').style.display="block"
-  document.getElementById('log').style.display='none'
-<?php endif;?>
-<?php if (isset($_SESSION['session_name'])): ?>
-    document.getElementById('reset').querySelector('a').textContent="❌ Sortir de la session"
-    window.folder=<?= json_encode($_SESSION['folder']);?>;
-    document.getElementById('session').querySelector('a').href=`./play.php?r=${window.folder}&p=1`
-<?php endif;?>
+window.eleveJsonFilesCount=<?php echo json_encode($eleveJsonFilesCount); ?>;
 window.devJsonFilesCount = <?php echo $devJsonFilesCount; ?>;
 window.startJsonFilesCount = <?php echo $startJsonFilesCount; ?>;
 window.loopJsonFilesCount = <?php echo $loopJsonFilesCount; ?>;
 window.conditionJsonFilesCount = <?php echo $conditionJsonFilesCount; ?>;
 window.functionJsonFilesCount = <?php echo $functionJsonFilesCount; ?>;
-window.eleveJsonFilesCount=<?php echo json_encode($eleveJsonFilesCount); ?>;
 let sum = 0
 for (let i=0;i<eleveJsonFilesCount.length;i++) {
     sum+=eleveJsonFilesCount[i]
@@ -291,5 +410,7 @@ if (window.devJsonFilesCount>1) {
 } else {
     document.getElementById('dev').style.display = 'none'
 }
+
+
 </script>
 </body></html>

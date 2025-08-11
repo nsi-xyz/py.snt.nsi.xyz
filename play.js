@@ -9,10 +9,11 @@ let grille = [];
 let pos_ori={}
 let parcours=[]
 let consignes={}
-let lvl
 let inelem = window.r
 let stop
 let niv = window.p
+let session = window.session
+let lvl
 let dic_affich = {};
 let traduc_parcours = {
     "←":"ArrowLeft",
@@ -21,15 +22,50 @@ let traduc_parcours = {
     "↓":"ArrowDown"
 }
 
-if (localStorage.getItem('lvl') !== null) {
-	lvl = JSON.parse(localStorage.getItem('lvl'))
+if (localStorage.getItem("progress_sig") !== null) {
+    lvl=JSON.parse(localStorage.getItem('lvl'))
+    const storedSig = localStorage.getItem("progress_sig");
+    console.log(storedSig)
+    const expectedSig = CryptoJS.HmacSHA256(JSON.stringify(lvl), str).toString();
+    console.log(expectedSig,lvl)
+    if (storedSig !== expectedSig) {
+        lvl = {"start":[], "loop":[], "condition":[], "function":[], "dev":[]};
+        if (!(String(inelem) in lvl)) {
+            lvl[inelem] = []
+        }
+        localStorage.setItem('lvl',JSON.stringify(lvl))
+        signProgress(lvl,str);
+    }
+}
+
+if (typeof window.lvl !== 'undefined') {
+    console.log("aa")
+    lvl = JSON.parse(window.lvl)
+    if (!(String(inelem) in lvl)) {
+        lvl[inelem] = []
+    }
+    console.log(lvl)
     localStorage.setItem('lvl',JSON.stringify(lvl))
+    signProgress(lvl,str);
+}
+
+if (localStorage.getItem('lvl') !== null && ((("co" in JSON.parse(localStorage.getItem('lvl'))) && window.session===1) || ((!("co" in JSON.parse(localStorage.getItem('lvl'))) && !(window.session===1))))) {    lvl = JSON.parse(localStorage.getItem('lvl'))
+    console.log("aie")
+    if (!(String(inelem) in lvl)) {
+        lvl[inelem] = []
+    }
+    localStorage.setItem('lvl',JSON.stringify(lvl))
+    signProgress(lvl,str);
 } else {
 	lvl = {"start":[], "loop":[], "condition":[], "function":[], "dev":[]};
+    if (!(String(inelem) in lvl)) {
+        lvl[inelem] = []
+    }
     localStorage.setItem('lvl',JSON.stringify(lvl))
+    signProgress(lvl,str);
 };
 
-/*document.getElementById('essai').innerHTML = "Résolution CSS (px) : " + window.innerWidth + " x " + window.innerHeight*/
+
 
 
 for (let i = 0;i<t_grille;i++) {
@@ -132,6 +168,14 @@ class instru_js extends HTMLElement {
                         test.innerHTML = consignes[i]
                     }
                     this.appendChild(test)
+                    if (consignes.length>12) {
+                        let size=consignes.length
+                        if (consignes.length>21) {
+                            size=21
+                        }
+                        this.style.transform=`scale(${12/size})`
+                        this.style.transformOrigin = "top left";
+                    }
                 }
         
             });
@@ -248,11 +292,15 @@ function lvl_jeu(matrice_lvl) {
                 affich_gr(event,"#7CB342");
                 if (!lvl[inelem].includes(niv)) {
                     lvl[inelem].push(niv)
-                }/*
-                if (lvl[inelem].length===window.jsonFilesCount) {
-                    lvl[inelem].push(0)
-                }*/
+                }
                 localStorage.setItem("lvl",JSON.stringify(lvl))
+                signProgress(lvl,str);
+                const form = new FormData()
+                form.append('lvl',JSON.stringify(lvl))
+                fetch('save_data.php', {
+                    method:'POST',
+                    body:form
+                })
                 document.removeEventListener("keyup",take_key);
                 if (niv < jsonFilesCount) {
                     wait(1500,lvl[inelem][lvl[inelem].length-1]+1)
@@ -289,10 +337,6 @@ function wait(ms,n_lvl=0) {
     }
 };
 
-function reset() {
-    localStorage.removeItem('lvl')
-    window.location.reload()
-}
 
 function avec_emo(str) {
     const test_emo = /[\p{Extended_Pictographic}]/gu;
@@ -309,6 +353,12 @@ function ajusterTailleEmoji() {
         }
         });
     }, 500)
+}
+
+function signProgress(lvl,str) {
+    const signature = CryptoJS.HmacSHA256(JSON.stringify(lvl), str).toString();
+    localStorage.setItem("progress_sig", signature);
+    console.log(signature)
 }
 
 fetch(`./${inelem}/00.json`)
@@ -347,13 +397,30 @@ if (lvl['dev'].length===window.devJsonFilesCount) {
 if (window.devJsonFilesCount>1) {
     document.getElementById("dev").style.display = 'block'
 }
-if (document.getElementById(inelem).classList.contains('menu-ko')) {
-    document.getElementById(inelem).classList.remove('menu-ko')
-    document.getElementById(inelem).classList.add('menu-now-ko')
-} else {
-    document.getElementById(inelem).classList.remove('menu-ok')
-    document.getElementById(inelem).classList.add('menu-now-ok')
+if (inelem==='start' || inelem==='loop' || inelem==='condition' || inelem==='function' || inelem==='dev') {
+    if (document.getElementById(inelem).classList.contains('menu-ko')) {
+        document.getElementById(inelem).classList.remove('menu-ko')
+        document.getElementById(inelem).classList.add('menu-now-ko')
+    } else {
+        document.getElementById(inelem).classList.remove('menu-ok')
+        document.getElementById(inelem).classList.add('menu-now-ok')
+    }
 }
+if (typeof window.folder !== null && window.folder === inelem) {
+    console.log('ai')
+    document.getElementById('session').style.backgroundColor="#1976d2"
+    document.getElementById('session').classList.remove('menu-session')
+    if (inelem==='start' || inelem==='loop' || inelem==='condition' || inelem==='function' || inelem==='dev') {
+        if (document.getElementById(inelem).classList.contains('menu-now-ko')) {
+            document.getElementById(inelem).classList.remove('menu-now-ko')
+        } else {
+            document.getElementById(inelem).classList.remove('menu-now-ok')
+        }
+
+    }
+    
+}
+
 
 
 
@@ -387,9 +454,7 @@ fetch(`./${inelem}/${window.jsonFile}`)
         }, 75);
     });
 
-/*
-faire taille instructions différente selon la longueur du script
-*/
+
 
 addEventListener('load',ajusterTailleEmoji)
 
@@ -426,4 +491,28 @@ end:
       STR R2,45
       STR R0,50
       HALT
+*/
+
+/*
+https://python.snt.nsi.xyz/play.php?r=J16&p=17
+https://python.snt.nsi.xyz/play.php?r=J16&p=18
+https://python.snt.nsi.xyz/play.php?r=J16&p=21
+https://python.snt.nsi.xyz/play.php?r=J06&p=9
+dans chrome
+faire page check
+bug émoji composé
+émoji qui ne s'affichent pas
+bug if elif else while avec syntaxe précise
+*/
+/*
+liste niveaux buggés
+https://python.snt.nsi.xyz/play.php?r=J01&p=2
+https://python.snt.nsi.xyz/play.php?r=J01&p=5
+https://python.snt.nsi.xyz/play.php?r=J01&p=10
+https://python.snt.nsi.xyz/play.php?r=J01&p=14
+https://python.snt.nsi.xyz/play.php?r=J01&p=19
+https://python.snt.nsi.xyz/play.php?r=J01&p=20
+https://python.snt.nsi.xyz/play.php?r=J01&p=21
+
+
 */

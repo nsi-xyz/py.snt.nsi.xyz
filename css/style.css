@@ -145,6 +145,10 @@ body {
     #menu .menu-now-ko {
         background-color: #ff9800;
     }
+    #menu .menu-session a:hover,
+    #menu .menu-session a:focus {
+        color:#1976d2
+    }
 
     #menu .menu-ok a:hover,
     #menu .menu-ok a:focus {
@@ -176,7 +180,9 @@ body {
      @media screen and (min-height: 570px) and (max-width: 768px) {
         .menu-bottom {
             list-style: none;
+            position:fixed;/*modifié*/
             width: 250px;
+            bottom:0;
         }
      }
 
@@ -361,7 +367,6 @@ body {
     border-collapse: collapse;
     border-spacing: 0;
     empty-cells: show;
-    /*border: 1px solid #141414;*/
     color: #fff;
     font-weight: bold;
     width: 100%;
@@ -376,6 +381,7 @@ body {
     padding : 1em 0;
     width: 10%;
     text-align: center;
+    aspect-ratio: 1;
 }
 .ko {
     font-size: 20px;
@@ -405,6 +411,44 @@ body {
 .now {
     color:#424242;
 }
+
+.td-any_ele {
+    cursor: pointer;
+    font-size: inherit;
+    margin: 0;
+    overflow: visible;
+    padding : 0.5em 0;
+    width: 8%;
+    text-align: center;
+    aspect-ratio: 1;
+}
+.ko_ele {
+    font-size: 14px;
+    width:23px;
+    height:23px;
+    /*border: 2px solid #ff9800;*/
+    background-color:#ff9800;
+    color:#F2F2F2;
+    border-radius:50%;
+    padding: 4px;
+    display:flex;
+    align-items: center;
+    justify-content: center
+}
+.ok_ele {
+    font-size: 14px;
+    width:23px;
+    height:23px;
+    background-color:#7cb342;
+    color:#F2F2F2;
+    border-radius:50%;
+    padding: 4px;
+    display:flex;
+    align-items: center;
+    justify-content: center
+}
+
+
 .td-hidden {
     cursor: pointer;
     background-color: #424242;
@@ -459,4 +503,40 @@ kbd {
 .reset-button:focus,
 .reset-button:hover {
     background-color: #3B0D11;
+}
+
+.forms {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.form-guest {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    padding: 1%;
+    margin-inline: 7%;
+    margin-block: 2%;
+}
+
+.pure-button-primary-join {
+    background-color: #9471DE;
+    color: #fff;
+}
+
+#create-account {
+    color: #3b8bba;
+    text-decoration: none;
+}
+#pseudo {
+    padding:0.6em;
+    border:none;
+    color:white;
 }

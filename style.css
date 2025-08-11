@@ -4,7 +4,7 @@
     gap: 0.8vw; 
     justify-content: center; 
     align-items: center;
-}
+} 
 
 #dev {
     display:none;
@@ -35,7 +35,6 @@ menu-lvl {
     margin-right:15%;
     margin-top:60px;
     aspect-ratio: 1;
-    /*display: grid;*/
     gap: 0vw; 
     align-items: center;
     grid-template-columns: repeat(3, 1fr);
