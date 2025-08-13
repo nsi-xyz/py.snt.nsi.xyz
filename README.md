@@ -54,5 +54,5 @@ Lorsque le dépot sera possible est sécurisé, vous pourrez déposer vos propre
 - Vincent ROBERT : Front only, UI / UX, debuguage, débugage CSS, création des 10 niveaux "start". 
 - Ilyas RAHMOUN : Adapatation d'un layouts de https://pure-css.github.io/ pour https://web.snt.nsi.xyz/ réutilisé ici, testeur.
 - Vivien G.R.
--- Back : php, html, et beaucoup de JS, portage du concpet https://compute-it.toxicode.fr/?progression=python
--- Front : html, css, responsive, 
+-- Back : pas mal de php, un peu de html, et beaucoup de JS, portage du concpet https://compute-it.toxicode.fr/?progression=python
+-- Front : html, css, responsive.
